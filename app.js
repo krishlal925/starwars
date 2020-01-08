@@ -33,7 +33,7 @@ function printList(data, column){
 
   let listHTML = items.map(function(item){
     return `
-    <li>${item}</li>
+    <li class="list-group-item">${item}</li>
     `
   }).join(' ');
 
