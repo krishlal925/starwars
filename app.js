@@ -20,9 +20,8 @@ async function loadData(){
 
 }
 function printList(data, column){
-
+  // save names or titles
   let items = data.results.map(function(item){
-
     if(column === "#filmsList"){
       return item.title;
     }
@@ -31,12 +30,46 @@ function printList(data, column){
     }
   })
 
-  let listHTML = items.map(function(item){
+  //save additional data for list items
+  let additionalData = items.map(function(item, index){
+    if (column=== '#peopleList'){
+      let count = data.results[index].films.length;
+      if(count === 1){
+        return `Appeared in 1 film`
+      }
+      else{
+        return `Appeared in ${count} films`
+      }
+    }
+    else if(column ==='#filmsList'){
+      let releaseDate = data.results[index].release_date;
+      return `Released on: ${releaseDate}`
+    }
+    else if (column === '#starshipsList'){
+      return data.results[index].starship_class;
+    }
+    else if(column === '#vehiclesList'){
+      return `Manufactured by: ${data.results[index].manufacturer}`
+    }
+    else{
+      return "to be completed later";
+    }
+  });
+
+
+
+
+  //create HTML for list
+  let listHTML = items.map(function(item, index){
     return `
-    <li class="list-group-item">${item}</li>
+    <li class="list-group-item">
+      <h5>${item}</h5>
+      <p>${additionalData[index]}</p>
+    </li>
     `
   }).join(' ');
 
+  //apply created html to webpage
   let list = document.querySelector(`${column}`);
   list.innerHTML = listHTML;
 }
