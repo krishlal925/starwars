@@ -3,11 +3,12 @@ let filmsURL = 'http://star-cors.herokuapp.com/films'
 let starshipsURL = 'http://star-cors.herokuapp.com/starships'
 let vehiclesURL = 'http://star-cors.herokuapp.com/vehicles'
 let peopleData, filmsData, starshipsData, vehiclesData
+let currentData = {...peopleData};
 
 async function loadData(){
   await Promise.all([axios.get(peopleURL), axios.get(filmsURL), axios.get(starshipsURL), axios.get(vehiclesURL)])
   .then(function(responses){
-    let [peopleData, filmsData, starshipsData, vehiclesData] = responses.map(function(response){
+    [peopleData, filmsData, starshipsData, vehiclesData] = responses.map(function(response){
       return response.data;
     })
     let testArr = [];
@@ -21,6 +22,7 @@ async function loadData(){
 
 function printList(data, column){
   // save names or titles
+
   let items = data.results.map(function(item){
     if(column === "#filmsList"){
       return item.title;
@@ -68,7 +70,7 @@ function printList(data, column){
 
   //apply created html to webpage
   let list = document.querySelector(`${column}`);
-  list.innerHTML = listHTML;
+  list.innerHTML += listHTML;
 }
 
 function search(event){
@@ -126,7 +128,6 @@ function printCount(count, total, totalDiv){
   }
   else if (totalDiv === '#filmsTotal'){
     textEnd = 'films';
-    console.log('I made it in films');
   }
   else if(totalDiv === '#starshipsTotal'){
     textEnd = 'starships';
@@ -137,15 +138,34 @@ function printCount(count, total, totalDiv){
   div.innerText = totalText + textEnd;
 }
 
+function loadMore(){
+
+  console.log(`peopleData: ${peopleData}`)
+  axios.get(peopleData.next)
+  .then(response => peopleData = response.data)
+  .then((data) => {
+    console.log(data)
+    printList(data, '#peopleList')
+
+    })
+
+}
+
 loadData();
-let peopleSearch = document.querySelector('#peopleSearch')
-peopleSearch.addEventListener('keyup',search)
 
-let filmSearch = document.querySelector('#filmSearch')
-filmSearch.addEventListener('keyup',search)
+//event listenrs for live searches
+let peopleSearch = document.querySelector('#peopleSearch');
+peopleSearch.addEventListener('keyup',search);
 
-let starshipSearch = document.querySelector('#starshipSearch')
-starshipSearch.addEventListener('keyup',search)
+let filmSearch = document.querySelector('#filmSearch');
+filmSearch.addEventListener('keyup',search);
 
-let vehicleSearch = document.querySelector('#vehicleSearch')
-vehicleSearch.addEventListener('keyup',search)
+let starshipSearch = document.querySelector('#starshipSearch');
+starshipSearch.addEventListener('keyup',search);
+
+let vehicleSearch = document.querySelector('#vehicleSearch');
+vehicleSearch.addEventListener('keyup',search);
+
+//event listeners for load more buttons
+let loadMorePeople = document.querySelector('#loadMorePeople');
+loadMorePeople.addEventListener('click', loadMore)

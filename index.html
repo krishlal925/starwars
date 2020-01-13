@@ -6,7 +6,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Starwars</title>
     <link href="https://fonts.googleapis.com/css?family=Fredoka One" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js'></script>
     <script src="app.js" defer> </script>
@@ -21,8 +20,9 @@
       <div class="row">
         <div class="col">
           <h2> People</h2>
-          <div class="form-group" >
+          <div class="form-group">
             <input type="text" class="form-control" id="peopleSearch" placeholder="type a name">
+            <button type="button" class="btn btn-primary" id='loadMorePeople'>Load more</button>
           </div>
           <div id="peopleTotal"></div>
           <ul id= "peopleList" class="list-group"></ul>
